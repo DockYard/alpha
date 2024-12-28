@@ -1,0 +1,7 @@
+{
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ex": "${capture}.${dirname}*eex",
+    "layouts.ex": "app.${dirname}.*eex,root.${dirname}.*eex"
+  }
+}
