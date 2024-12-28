@@ -5,7 +5,7 @@ defmodule Mix.Tasks.Alpha.New do
   """
   use Mix.Task
 
-  @spinners "⠁⠂⠄⡀⡁⡂⡄⡅⡇⡏⡗⡧⣇⣏⣗⣧⣯⣷⣿⢿⣻⢻⢽⣹⢹⢸⠸⢘⠘⠨⢈⠈⠐⠠⢀ " |> String.split("")
+  @spinners "⠁⠂⠄⡀⡁⡂⡄⡅⡆⡇⡏⡗⡧⣇⣏⣗⣧⣯⣷⣿⢿⣻⢻⢽⣹⢹⢺⢼⣸⢸⠸⢘⠘⠨⢈⠈⠐⠠⢀ " |> String.split("")
 
   def run([name]) do
     generate_project(name)
