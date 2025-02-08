@@ -68,8 +68,8 @@ defmodule Mix.Tasks.Alpha.New do
         |> String.split(~r/(\r|\n)/, trim: true)
         |> Enum.each(fn(line) ->
           line = String.trim(line)
-          send(task_pid, {:length, String.length(line)})
-          IO.write("\r\e[2C\e[K#{String.trim(line)}")
+          send(task_pid, {:line_length, String.length(line)})
+          IO.write("\r\e[2C\e[K\e[?7l#{String.trim(line)}")
           Process.sleep(2)
         end)
       end)
@@ -78,20 +78,22 @@ defmodule Mix.Tasks.Alpha.New do
     end)
   end
 
-  defp spinner({stage, idx, length} = state) do
+  defp spinner({stage, idx, line_length} = state) do
     receive do
-      :start -> spinner({:start, idx, length})
-      {:length, new_length} -> spinner({stage, idx, new_length})
+      :start -> spinner({:start, idx, line_length})
+      {:line_length, new_line_length} -> spinner({stage, idx, new_line_length})
       :stop -> :ok
 
     after
       0 ->
-        Process.sleep(50)
+        Process.sleep(80)
         case state do
-          {:start, idx, length} ->
-            spinner = Enum.at(@spinners, rem(idx, length(@spinners)))
-            IO.write("\r#{spinner}\e[#{length + 3}G")
-            spinner({:start, idx + 1, length})
+          {:start, idx, line_length} ->
+            spinners_length = length(@spinners)
+            spinner = Enum.at(@spinners, rem(idx, spinners_length))
+            IO.write("\r#{spinner}\e[#{line_length + 3}G")
+
+            spinner({:start, rem(idx + 1, spinners_length), line_length})
           state -> spinner(state)
         end
     end
